@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Routify - Smart Route Planner</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+</head>
+<body>
+  <div class="header">
+    <h1>🚀 Routify</h1>
+  </div>
+
+  <div class="container">
+    <!-- Route Input Section -->
+    <div class="card">
+      <h2><i class="fas fa-route"></i> Plan Your Route</h2>
+      <form id="routeForm">
+        <div class="input-group">
+          <i class="fas fa-play-circle"></i>
+          <input type="text" id="start" placeholder="Enter start location (e.g., Connaught Place, Delhi)" required />
+          <button type="button" id="useCurrentStart" class="location-btn" title="Use current location">
+            <i class="fas fa-crosshairs"></i>
+          </button>
+        </div>
+        
+        <div class="input-group">
+          <i class="fas fa-flag-checkered"></i>
+          <input type="text" id="end" placeholder="Enter destination (e.g., India Gate, Delhi)" required />
+        </div>
+        
+        <div class="input-row">
+          <div class="input-group">
+            <i class="fas fa-clock"></i>
+            <input type="datetime-local" id="time" required />
+          </div>
+          
+          <div class="input-group">
+            <i class="fas fa-car"></i>
+            <select id="transport">
+              <option value="" disabled selected>Select transport mode</option>
+              <option value="bus">🚌 Bus</option>
+              <option value="bike">🚴 Bike</option>
+              <option value="walk">🚶 Walk</option>
+              <option value="car">🚗 Car</option>
+              <option value="metro">🚇 Metro</option>
+              <option value="train">🚆 Train</option>
+              <option value="auto">🛺 Auto</option>
+            </select>
+          </div>
+        </div>
+        
+        <button type="submit" id="submitBtn">
+          <i class="fas fa-search"></i> Find Route & Matches
+        </button>
+        
+        <button type="button" id="newRouteBtn" class="new-route-btn">
+          <i class="fas fa-plus"></i> New Route
+        </button>
+      </form>
+    </div>
+
+    <!-- Live Location Toggle -->
+    <div class="card">
+      <div class="location-toggle">
+        <label for="shareLocation" class="toggle-label">
+          <i class="fas fa-location-dot"></i>
+          Share Live Location
+        </label>
+        <input type="checkbox" id="shareLocation" class="toggle-checkbox">
+        <span class="toggle-slider"></span>
+        <span id="locationStatus" class="location-status">Disabled</span>
+      </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="card">
+      <h3><i class="fas fa-map"></i> Live Route Map</h3>
+      <div id="map"></div>
+      <div class="map-controls">
+        <button id="clearMap" class="control-btn">
+          <i class="fas fa-trash"></i> Clear Map
+        </button>
+        <button id="centerMap" class="control-btn">
+          <i class="fas fa-location-arrow"></i> Center on Me
+        </button>
+      </div>
+    </div>
+
+    <!-- Matched Routes Section -->
+    <div class="card">
+      <h3><i class="fas fa-users"></i> Matched Travelers</h3>
+      <div id="matchesContainer">
+        <div id="noMatches" class="no-matches">
+          <i class="fas fa-search"></i>
+          <p>Submit a route to find fellow travelers!</p>
+        </div>
+        <div id="matches" class="matches-grid"></div>
+      </div>
+    </div>
+
+    <!-- Live Users Section -->
+    <div class="card">
+      <h3><i class="fas fa-broadcast-tower"></i> Live Travelers</h3>
+      <div id="liveUsers" class="live-users"></div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+    <div class="loading-spinner">
+      <i class="fas fa-route fa-spin"></i>
+      <p>Finding your route...</p>
+    </div>
+  </div>
+
+  <!-- Location Permission Modal -->
+  <div id="locationModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-map-marker-alt"></i> Enable Live Location</h3>
+        <button id="closeLocationModal" class="close-btn">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="privacy-note">
+          <i class="fas fa-lock"></i>
+          <p><strong>Your privacy matters.</strong> Location shared only with connected travelers.</p>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button id="allowLocationBtn" class="allow-btn">
+          <i class="fas fa-check"></i> Allow Location
+        </button>
+        <button id="denyLocationBtn" class="deny-btn">
+          <i class="fas fa-times"></i> Not Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+  <script src="assets/js/script.js"></script>
+</body>
+</html>
