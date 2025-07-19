@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Routify | Login</title>
+  <style>
+    body {
+      font-family: 'Urbanist',sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-image: url('pexels-nubikini-385997.jpg'); /* Replace with your image */
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+
+    .container {
+      width: 350px;
+      padding: 50px;
+      background-color: rgba(234, 247, 255, 0.75);
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #004080;
+      font-size: 32px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #444;
+      font-weight: bold;
+    }
+
+    .form-group input {
+      width: calc(100% - 20px);
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .form-group button {
+      width: 48%;
+      padding: 12px 20px;
+      background-color: #004080;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    .form-group button:hover {
+      background-color: #003366;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    p.link {
+      text-align: center;
+      margin-top: 15px;
+    }
+    
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist&display=swap" rel="stylesheet">
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>Login to Routify</h2>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email">
+      <div id="email-error" class="error-message"></div>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password">
+      <div id="password-error" class="error-message"></div>
+    </div>
+    <div class="form-group button-container">
+      <button id="loginButton">Login</button>
+      <button id="signupButton">Signup</button>
+    </div>
+    <p class="link"><a href="#">Forgot Password?</a></p>
+  </div>
+
+  <script>
+    // Replace this config with your Firebase project's details
+    const firebaseConfig = {
+      apiKey: "AIzaSyC3BrMpZ2bImxVMykzb03hltYt1c0zpctQ",
+      authDomain: "routify-hustlesquad.firebaseapp.com",
+      projectId: "routify-hustlesquad",
+      storageBucket: "routify-hustlesquad.firebasestorage.app",
+      messagingSenderId:  "463789939388",
+      appId: "1:463789939388:web:f08121a803f3b431d30eb9"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginButton = document.getElementById('loginButton');
+    const signupButton = document.getElementById('signupButton');
+    const emailError = document.getElementById('email-error');
+    const passwordError = document.getElementById('password-error');
+
+    loginButton.addEventListener('click', () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      emailError.textContent = "";
+      passwordError.textContent = "";
+
+      if (!email) {
+        emailError.textContent = "Please enter your email.";
+        return;
+      }
+      if (!password) {
+        passwordError.textContent = "Please enter your password.";
+        return;
+      }
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          alert("Login successful!");
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          if (error.code === 'auth/user-not-found') {
+            emailError.textContent = "User not found. Please sign up.";
+          } else if (error.code === 'auth/wrong-password') {
+            passwordError.textContent = "Incorrect password.";
+          } else {
+            emailError.textContent = error.message;
+          }
+        });
+    });
+
+    signupButton.addEventListener('click', () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      emailError.textContent = "";
+      passwordError.textContent = "";
+
+      if (!email) {
+        emailError.textContent = "Please enter your email.";
+        return;
+      }
+      if (!password) {
+        passwordError.textContent = "Please enter your password.";
+        return;
+      }
+      if (password.length < 6) {
+        passwordError.textContent = "Password must be at least 6 characters.";
+        return;
+      }
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          alert("Signup successful!");
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          emailError.textContent = error.message;
+        });
+    });
+  </script>
+</body>
+</html>
